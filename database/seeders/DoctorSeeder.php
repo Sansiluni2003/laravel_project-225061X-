@@ -11,21 +11,21 @@ class DoctorSeeder extends Seeder
     {
         $doctors = [
             [
-                'name' => 'John Smith',
+                'name' => 'Dr. John Smith',
                 'specialization' => 'Cardiologist',
                 'description' => 'Experienced cardiologist with over 15 years of practice in treating heart conditions.',
                 'phone' => '(555) 123-4567',
                 'email' => 'john.smith@example.com',
             ],
             [
-                'name' => 'Sarah Johnson',
+                'name' => 'Dr. Sarah Johnson',
                 'specialization' => 'Pediatrician',
                 'description' => 'Dedicated pediatrician specializing in child healthcare and development.',
                 'phone' => '(555) 234-5678',
                 'email' => 'sarah.johnson@example.com',
             ],
             [
-                'name' => 'Michael Chen',
+                'name' => 'Dr. Michael Chen',
                 'specialization' => 'Orthopedic Surgeon',
                 'description' => 'Skilled orthopedic surgeon specializing in sports injuries and joint replacements.',
                 'phone' => '(555) 345-6789',

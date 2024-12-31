@@ -10,7 +10,7 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = auth()->user()->appointments()->with('doctor')->latest()->get();
+        $appointments = Appointment::where('user_id', auth()->id())->get();
         return view('appointments.index', compact('appointments'));
     }
 
@@ -26,30 +26,32 @@ class AppointmentController extends Controller
             'doctor_id' => 'required|exists:doctors,id',
             'appointment_date' => 'required|date|after:today',
             'appointment_time' => 'required',
-            'description' => 'nullable|string|max:1000',
+            'description' => 'nullable|string'
         ]);
 
-        $appointment = auth()->user()->appointments()->create($validated);
+        $validated['user_id'] = auth()->id();
+        Appointment::create($validated);
 
         return redirect()->route('appointments.index')
-            ->with('success', 'Appointment scheduled successfully!');
+            ->with('success', 'Appointment booked successfully.');
     }
 
-    public function update(Request $request, Appointment $appointment)
+    public function show(Appointment $appointment)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,confirmed,cancelled',
-        ]);
-
-        $appointment->update($validated);
-
-        return redirect()->back()->with('success', 'Appointment updated successfully!');
+        if ($appointment->user_id !== auth()->id()) {
+            abort(403);
+        }
+        return view('appointments.show', compact('appointment'));
     }
 
     public function destroy(Appointment $appointment)
     {
+        if ($appointment->user_id !== auth()->id()) {
+            abort(403);
+        }
+        
         $appointment->delete();
         return redirect()->route('appointments.index')
-            ->with('success', 'Appointment cancelled successfully!');
+            ->with('success', 'Appointment cancelled successfully.');
     }
 }

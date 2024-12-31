@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="mb-4">
-                        <a href="{{ route('appointments.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <a href="{{ route('appointments.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
                             Book New Appointment
                         </a>
                     </div>
@@ -18,33 +18,34 @@
                     @if($appointments->isEmpty())
                         <p class="text-gray-500">You have no appointments scheduled.</p>
                     @else
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full table-auto">
-                                <thead>
-                                    <tr class="bg-gray-100">
-                                        <th class="px-4 py-2">Doctor</th>
-                                        <th class="px-4 py-2">Date</th>
-                                        <th class="px-4 py-2">Time</th>
-                                        <th class="px-4 py-2">Status</th>
-                                        <th class="px-4 py-2">Actions</th>
+                        <div class="relative overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Doctor</th>
+                                        <th scope="col" class="px-6 py-3">Date</th>
+                                        <th scope="col" class="px-6 py-3">Time</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                        <th scope="col" class="px-6 py-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($appointments as $appointment)
-                                        <tr>
-                                            <td class="border px-4 py-2">{{ $appointment->doctor->name }}</td>
-                                            <td class="border px-4 py-2">{{ $appointment->appointment_date->format('M d, Y') }}</td>
-                                            <td class="border px-4 py-2">{{ $appointment->appointment_time->format('h:i A') }}</td>
-                                            <td class="border px-4 py-2">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                    @if($appointment->status === 'confirmed') bg-green-100 text-green-800
+                                        <tr class="bg-white border-b">
+                                            <td class="px-6 py-4">{{ $appointment->doctor->name }}</td>
+                                            <td class="px-6 py-4">{{ $appointment->appointment_date->format('M d, Y') }}</td>
+                                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</td>
+                                            <td class="px-6 py-4">
+                                                <span class="px-2 py-1 text-sm rounded-full 
+                                                    @if($appointment->status === 'pending') bg-yellow-100 text-yellow-800
+                                                    @elseif($appointment->status === 'confirmed') bg-green-100 text-green-800
                                                     @elseif($appointment->status === 'cancelled') bg-red-100 text-red-800
-                                                    @else bg-yellow-100 text-yellow-800 @endif">
+                                                    @endif">
                                                     {{ ucfirst($appointment->status) }}
                                                 </span>
                                             </td>
-                                            <td class="border px-4 py-2">
-                                                @if($appointment->status !== 'cancelled')
+                                            <td class="px-6 py-4">
+                                                @if($appointment->status === 'pending')
                                                     <form action="{{ route('appointments.destroy', $appointment) }}" method="POST" class="inline">
                                                         @csrf
                                                         @method('DELETE')

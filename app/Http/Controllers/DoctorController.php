@@ -9,12 +9,13 @@ class DoctorController extends Controller
 {
     public function index()
     {
-        $doctors = Doctor::all();
+        $doctors = Doctor::with('doctorProfile')->get();
         return view('doctors.index', compact('doctors'));
     }
 
     public function show(Doctor $doctor)
     {
+        $doctor->load('doctorProfile');
         return view('doctors.show', compact('doctor'));
     }
 }
